@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataForge — Build Databases Without Code</title>
+  <link href="./DataForge — Build Databases Without Code_files/css2" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #060810;
+      --surface: #0d1117;
+      --surface2: #161b27;
+      --border: rgba(255,255,255,0.07);
+      --cyan: #00e5ff;
+      --violet: #7c3aed;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --text: #f1f5f9;
+      --text2: #94a3b8;
+      --text3: #f1f5f9;
+      --sans: 'DM Sans', sans-serif;
+      --display: 'Syne', sans-serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    .contact-buttons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      font-family: var(--sans);
+      border: 1px solid transparent;
+    }
+
+    .contact-btn.email {
+      background: rgba(124, 58, 237, 0.15);
+      color: #a78bfa;
+      border-color: rgba(124, 58, 237, 0.2);
+    }
+    .contact-btn.email:hover {
+      background: rgba(124, 58, 237, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.2);
+    }
+
+    .contact-btn.whatsapp {
+      background: rgba(37, 211, 102, 0.15);
+      color: #34d399;
+      border-color: rgba(37, 211, 102, 0.2);
+    }
+    .contact-btn.whatsapp:hover {
+      background: rgba(37, 211, 102, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.2);
+    }
+
+    .contact-btn .icon {
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 48px;
+      background: rgba(6,8,16,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .nav-logo {
+      font-family: var(--display);
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-logo span { color: var(--cyan); }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--cyan); }
+
+    .nav-cta {
+      background: var(--cyan);
+      color: #060810;
+      border: none;
+      padding: 9px 22px;
+      border-radius: 6px;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      text-align: center;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(0,229,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,229,255,0.08);
+      border: 1px solid rgba(0,229,255,0.2);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-family: var(--mono);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--cyan);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+
+    h1 .accent { color: var(--cyan); }
+    h1 .dim { color: var(--text3); }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--text2);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+      font-weight: 300;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 72px;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+
+    .btn-primary {
+      background: var(--cyan);
+      color: #060810;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 30px rgba(0,229,255,0.25);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(0,229,255,0.4); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text2);
+      border: 1px solid var(--border);
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .preview-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+
+    .preview-frame {
+      background: var(--surface);
+      border: 1px solid rgba(0,229,255,0.15);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px var(--border), 0 40px 120px rgba(0,0,0,0.8), 0 0 80px rgba(0,229,255,0.05);
+    }
+
+    .preview-titlebar {
+      background: #0a0e1a;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot.r { background: #ef4444; }
+    .dot.y { background: #f59e0b; }
+    .dot.g { background: #10b981; }
+
+    .preview-titlebar-url {
+      flex: 1;
+      margin: 0 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 4px 12px;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--text3);
+      text-align: center;
+    }
+
+    .app-preview {
+      display: flex;
+      height: 460px;
+      font-size: 0.72rem;
+    }
+
+    .app-sidebar {
+      width: 180px;
+      background: #0a0e1a;
+      border-right: 1px solid var(--border);
+      padding: 12px 0;
+      flex-shrink: 0;
+    }
+
+    .app-sidebar-logo {
+      padding: 4px 14px 12px;
+      font-family: var(--display);
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--cyan);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+
+    .sidebar-item {
+      padding: 8px 14px;
+      color: var(--text3);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      transition: background 0.15s;
+    }
+
+    .sidebar-item.active {
+      background: rgba(0,229,255,0.08);
+      color: var(--cyan);
+      border-left: 2px solid var(--cyan);
+    }
+
+    .sidebar-item .dot2 {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    }
+
+    .app-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    .app-header-bar {
+      background: #0a0e1a;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab {
+      padding: 5px 14px;
+      border-radius: 5px;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text3);
+      cursor: pointer;
+    }
+
+    .tab.active { background: rgba(0,229,255,0.12); color: var(--cyan); }
+
+    .app-content { flex: 1; overflow: hidden; background: #0d1117; }
+
+    .mock-dashboard { padding: 14px; }
+
+    .mock-kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .mock-kpi {
+      background: #161b27;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 7px;
+      padding: 10px 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mock-kpi::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .mock-kpi.c1::before { background: linear-gradient(90deg, #00e5ff, transparent); }
+    .mock-kpi.c2::before { background: linear-gradient(90deg, #7c3aed, transparent); }
+    .mock-kpi.c3::before { background: linear-gradient(90deg, #10b981, transparent); }
+    .mock-kpi.c4::before { background: linear-gradient(90deg, #f59e0b, transparent); }
+
+    .mock-kpi-label { font-size: 0.55rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; font-family: var(--mono); }
+    .mock-kpi-val { font-size: 1.3rem; font-weight: 700; font-family: var(--display); }
+    .c1 .mock-kpi-val { color: #00e5ff; }
+    .c2 .mock-kpi-val { color: #7c3aed; }
+    .c3 .mock-kpi-val { color: #10b981; }
+    .c4 .mock-kpi-val { color: #f59e0b; }
+
+    .mock-table { width: 100%; border-collapse: collapse; }
+    .mock-table th { background: #0a0e1a; padding: 6px 10px; font-size: 0.6rem; color: #475569; text-align: left; text-transform: uppercase; letter-spacing: 0.8px; font-family: var(--mono); }
+    .mock-table td { padding: 6px 10px; font-size: 0.65rem; border-bottom: 1px solid rgba(255,255,255,0.04); color: #cbd5e1; font-family: var(--mono); }
+    .mock-table tr.low td { background: rgba(239,68,68,0.08); }
+    .mock-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .mock-badge { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 0.58rem; font-weight: 700; }
+    .mock-badge.ok { background: rgba(16,185,129,0.15); color: #10b981; }
+    .mock-badge.low { background: rgba(239,68,68,0.15); color: #ef4444; }
+
+    .cts { color: #7c3aed; font-weight: 700; }
+    .calc { color: #00e5ff; font-weight: 700; }
+
+    .callout {
+      position: absolute;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      max-width: 180px;
+      animation: fadeUp 1s ease both;
+    }
+
+    .callout-line {
+      width: 40px;
+      height: 1px;
+      background: var(--cyan);
+      margin-top: 9px;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .callout-line::after {
+      content: '';
+      position: absolute;
+      right: 0; top: -3px;
+      width: 7px; height: 7px;
+      border-top: 1px solid var(--cyan);
+      border-right: 1px solid var(--cyan);
+      transform: rotate(45deg);
+    }
+
+    .callout-text {
+      font-size: 0.7rem;
+      color: var(--text2);
+      line-height: 1.4;
+      font-family: var(--sans);
+    }
+
+    .callout-text strong { color: var(--cyan); display: block; font-size: 0.72rem; margin-bottom: 2px; }
+
+    section { padding: 100px 48px; position: relative; }
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 24px; height: 1px;
+      background: var(--cyan);
+    }
+
+    h2 {
+      font-family: var(--display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      color: var(--text2);
+      font-size: 1.05rem;
+      max-width: 520px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-top: 64px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      padding: 36px 32px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s;
+    }
+
+    .feature-card:hover { background: var(--surface2); }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .feature-card:hover::before { opacity: 1; }
+
+    .feature-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      font-family: var(--mono);
+      font-weight: 700;
+    }
+
+    .feature-icon.cyan { background: rgba(0,229,255,0.1); color: var(--cyan); border: 1px solid rgba(0,229,255,0.2); }
+    .feature-icon.violet { background: rgba(124,58,237,0.1); color: var(--violet); border: 1px solid rgba(124,58,237,0.2); }
+    .feature-icon.green { background: rgba(16,185,129,0.1); color: var(--green); border: 1px solid rgba(16,185,129,0.2); }
+    .feature-icon.amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .feature-icon.red { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+
+    .feature-title {
+      font-family: var(--display);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .feature-desc {
+      font-size: 0.85rem;
+      color: var(--text2);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    .field-types-section { background: var(--surface); }
+
+    .field-type-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 40px;
+    }
+
+    .field-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text2);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .field-chip:hover { border-color: var(--cyan); color: var(--text); }
+
+    .field-chip-icon {
+      color: var(--cyan);
+      font-size: 0.9rem;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .field-chip-special { border-color: rgba(124,58,237,0.3); }
+    .field-chip-special .field-chip-icon { color: var(--violet); }
+    .field-chip-special:hover { border-color: var(--violet); }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 24px;
+      margin-top: 64px;
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 32px;
+      left: 60px; right: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0.3;
+    }
+
+    .step-card {
+      text-align: center;
+      padding: 32px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .step-num {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,229,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--cyan);
+      margin: 0 auto 20px;
+      background: rgba(0,229,255,0.05);
+    }
+
+    .step-title {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+    }
+
+    .step-desc {
+      font-size: 0.8rem;
+      color: var(--text2);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    .inventory-section {
+      background: linear-gradient(180deg, var(--bg) 0%, rgba(0,229,255,0.02) 50%, var(--bg) 100%);
+    }
+
+    .inventory-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      margin-top: 64px;
+    }
+
+    .inventory-visual {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .inv-header {
+      background: #0a0e1a;
+      padding: 10px 16px;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--cyan);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .inv-table { width: 100%; border-collapse: collapse; }
+    .inv-table th { padding: 8px 14px; font-size: 0.6rem; color: var(--text3); text-align: left; text-transform: uppercase; letter-spacing: 1px; font-family: var(--mono); border-bottom: 1px solid var(--border); }
+    .inv-table td { padding: 9px 14px; font-size: 0.68rem; font-family: var(--mono); border-bottom: 1px solid rgba(255,255,255,0.03); color: var(--text2); }
+    .inv-table tr.alert td { background: rgba(239,68,68,0.06); }
+    .inv-in { color: var(--green); font-weight: 700; }
+    .inv-out { color: var(--red); font-weight: 700; }
+    .inv-bal { color: var(--cyan); font-weight: 700; }
+    .inv-bal.low { color: var(--red); }
+    .inv-badge-low { background: rgba(239,68,68,0.15); color: var(--red); padding: 2px 8px; border-radius: 10px; font-size: 0.58rem; font-weight: 700; }
+    .inv-badge-ok { background: rgba(16,185,129,0.15); color: var(--green); padding: 2px 8px; border-radius: 10px; font-size: 0.58rem; font-weight: 700; }
+
+    .inventory-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .inv-point {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .inv-point-icon {
+      width: 38px; height: 38px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .inv-point-icon.g { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); }
+    .inv-point-icon.c { background: rgba(0,229,255,0.1); border: 1px solid rgba(0,229,255,0.2); }
+    .inv-point-icon.v { background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.2); }
+    .inv-point-icon.a { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); }
+
+    .inv-point-title { font-family: var(--display); font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+    .inv-point-desc { font-size: 0.8rem; color: var(--text2); line-height: 1.5; font-weight: 300; }
+
+    .save-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .save-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 24px;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .save-card:hover { border-color: rgba(0,229,255,0.3); transform: translateY(-3px); }
+
+    .save-icon { font-size: 2rem; margin-bottom: 14px; display: block; }
+    .save-title { font-family: var(--display); font-weight: 700; margin-bottom: 8px; }
+    .save-desc { font-size: 0.8rem; color: var(--text2); line-height: 1.5; font-weight: 300; }
+
+    .guide-section { background: var(--surface); }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 48px;
+    }
+
+    .guide-block {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .guide-block-header {
+      background: #0a0e1a;
+      padding: 14px 20px;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .guide-block-body { padding: 20px; }
+
+    .guide-step {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 18px;
+      align-items: flex-start;
+    }
+
+    .guide-step:last-child { margin-bottom: 0; }
+
+    .guide-step-num {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: rgba(0,229,255,0.1);
+      border: 1px solid rgba(0,229,255,0.25);
+      color: var(--cyan);
+      font-size: 0.6rem;
+      font-weight: 700;
+      font-family: var(--mono);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .guide-step-text {
+      font-size: 0.82rem;
+      color: var(--text2);
+      line-height: 1.55;
+      font-weight: 300;
+    }
+
+    .guide-step-text strong { color: var(--text); font-weight: 500; }
+
+    code {
+      font-family: var(--mono);
+      background: rgba(0,229,255,0.08);
+      color: var(--cyan);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 48px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .faq-item {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-item:last-child { border-bottom: none; }
+
+    .faq-q {
+      padding: 20px 24px;
+      font-family: var(--display);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: color 0.2s;
+      user-select: none;
+    }
+
+    .faq-q:hover { color: var(--cyan); }
+
+    .faq-q::after {
+      content: '+';
+      font-size: 1.2rem;
+      color: var(--text3);
+      transition: transform 0.2s;
+      font-family: var(--mono);
+      font-weight: 300;
+    }
+
+    .faq-item.open .faq-q { color: var(--cyan); }
+    .faq-item.open .faq-q::after { transform: rotate(45deg); color: var(--cyan); }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.2s;
+      font-size: 0.85rem;
+      color: var(--text2);
+      line-height: 1.7;
+      font-weight: 300;
+      padding: 0 24px;
+    }
+
+    .faq-item.open .faq-a {
+      max-height: 300px;
+      padding: 0 24px 20px;
+    }
+
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 48px;
+      font-size: 0.85rem;
+    }
+
+    .spec-table th {
+      text-align: left;
+      padding: 12px 20px;
+      background: #0a0e1a;
+      color: var(--text3);
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .spec-table td {
+      padding: 13px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: var(--text2);
+      font-weight: 300;
+    }
+
+    .spec-table td:first-child { color: var(--text); font-weight: 500; }
+
+    .spec-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .check { color: var(--green); font-size: 1rem; }
+    .cross { color: var(--red); font-size: 1rem; }
+
+    .cta-section {
+      text-align: center;
+      padding: 120px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 600px; height: 300px;
+      background: radial-gradient(ellipse, rgba(0,229,255,0.06), transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-section h2 { margin-bottom: 16px; }
+    .cta-section p { color: var(--text2); font-size: 1rem; margin-bottom: 40px; font-weight: 300; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text3);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer strong { color: var(--cyan); font-family: var(--display); font-weight: 700; }
+
+    .footer-contact {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .footer-contact a {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.78rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+
+    .footer-contact a:hover { color: var(--cyan); }
+    .footer-contact a.whatsapp:hover { color: #34d399; }
+    .footer-contact a.email:hover { color: #a78bfa; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    .stat-strip {
+      display: flex;
+      justify-content: center;
+      gap: 64px;
+      padding: 48px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      flex-wrap: wrap;
+    }
+
+    .stat-item { text-align: center; }
+    .stat-val {
+      font-family: var(--display);
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--cyan);
+      letter-spacing: -1px;
+      display: block;
+    }
+    .stat-lbl { font-size: 0.75rem; color: var(--text3); font-family: var(--mono); text-transform: uppercase; letter-spacing: 1px; }
+
+    .callout-strip {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .callout-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--cyan);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 16px;
+      font-size: 0.78rem;
+      color: var(--text2);
+      line-height: 1.5;
+    }
+
+    .callout-card.violet { border-left-color: var(--violet); }
+    .callout-card.green { border-left-color: var(--green); }
+    .callout-card strong { display: block; color: var(--text); margin-bottom: 4px; font-size: 0.82rem; }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .gallery-grid .preview-frame {
+      box-shadow: 0 4px 30px rgba(0,0,0,0.6);
+    }
+
+    .gallery-grid .preview-frame img {
+      width: 100%;
+      display: block;
+    }
+
+    .comparison-container {
+      max-width: 950px;
+      margin: 60px auto;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .comp-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 12px;
+    }
+
+    .comp-table th {
+      color: #94a3b8;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-size: 0.75rem;
+      padding: 20px;
+    }
+
+    .comp-table td {
+      padding: 24px;
+      background: #0d1117;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .comp-table td:first-child {
+      border-left: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px 0 0 12px;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+
+    .comp-table td:last-child {
+      border-right: 1px solid rgba(255,255,255,0.05);
+      border-radius: 0 12px 12px 0;
+      color: #fffff;
+    }
+
+    .highlight-df {
+      color: #00e5ff;
+      font-weight: 700;
+      text-shadow: 0 0 15px rgba(0,229,255,0.3);
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 12px 20px; }
+      .nav-links { display: none; }
+      section { padding: 64px 20px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .steps::before { display: none; }
+      .inventory-grid { grid-template-columns: 1fr; }
+      .guide-grid { grid-template-columns: 1fr; }
+      .save-grid { grid-template-columns: 1fr; }
+      .stat-strip { gap: 32px; }
+      footer { flex-direction: column; text-align: center; }
+      h1 { letter-spacing: -1px; }
+      .callout-strip { grid-template-columns: 1fr; }
+      .contact-buttons { flex-wrap: wrap; justify-content: center; }
+      .footer-contact { justify-content: center; }
+      .gallery-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">⊞ Data<span>Forge</span></div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#field-types">Field Types</a></li>
+    <li><a href="#inventory">Stock Inventory</a></li>
+    <li><a href="#guide">Guide</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li>
+      <a href="mailto:xionix555@protonmail.com" class="contact-btn email" style="padding:6px 14px;font-size:0.72rem;">
+        <span class="icon">✉</span> Email
+      </a>
+    </li>
+    <li>
+      <a href="https://wa.me/919804711241?text=Hi%21%20I%27m%20interested%20in%20DataForge" target="_blank" class="contact-btn whatsapp" style="padding:6px 14px;font-size:0.72rem;">
+        <span class="icon">💬</span> WhatsApp
+      </a>
+    </li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('download').scrollIntoView({behavior:'smooth'})">Open App ↗</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge">Single File · No Install · No Server</div>
+
+  <h1>
+    Build Databases<br>
+    <span class="accent">Without Code</span><br>
+    <span class="dim">on Your Windows PC</span>
+  </h1>
+
+  <p class="hero-sub">
+    DataForge is a fully self-contained APP — design tables, enter data, run cross-table aggregates, customise dashboards, and export to Excel. Everything saved locally. Nothing uploaded anywhere.
+  </p>
+
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="document.getElementById('guide').scrollIntoView({behavior:'smooth'})">
+      Get Started →
+    </button>
+    <button class="btn-ghost" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">
+      Explore Features
+    </button>
+  </div>
+
+  <!-- APP MOCKUP -->
+  <div class="preview-wrap">
+    <div class="preview-frame">
+      <div class="preview-titlebar">
+        <div class="dot r"></div>
+        <div class="dot y"></div>
+        <div class="dot g"></div>
+        <div class="preview-titlebar-url">DataForge — Database Builder</div>
+      </div>
+
+      <div class="app-preview">
+        <div class="app-sidebar">
+          <div class="app-sidebar-logo">⊞ DataForge</div>
+          <div class="sidebar-item"><div class="dot2" style="background:#00e5ff"></div>Products</div>
+          <div class="sidebar-item active"><div class="dot2" style="background:#10b981"></div>Stock In</div>
+          <div class="sidebar-item"><div class="dot2" style="background:#ef4444"></div>Stock Out</div>
+          <div class="sidebar-item"><div class="dot2" style="background:#7c3aed"></div>Stock Balance</div>
+          <div class="sidebar-item" style="margin-top:12px;border-top:1px solid rgba(255,255,255,0.06);padding-top:12px"><div class="dot2" style="background:#f59e0b"></div>Suppliers</div>
+        </div>
+
+        <div class="app-main">
+          <div class="app-header-bar">
+            <div class="tab active">Dashboard</div>
+            <div class="tab">Data</div>
+            <div class="tab">Builder</div>
+            <div class="tab">Form</div>
+          </div>
+          <div class="app-content">
+            <div class="mock-dashboard">
+              <div class="mock-kpi-row">
+                <div class="mock-kpi c1"><div class="mock-kpi-label">Products</div><div class="mock-kpi-val">8</div></div>
+                <div class="mock-kpi c3"><div class="mock-kpi-label">Total In</div><div class="mock-kpi-val">780</div></div>
+                <div class="mock-kpi c4"><div class="mock-kpi-label">Total Out</div><div class="mock-kpi-val">328</div></div>
+                <div class="mock-kpi c2"><div class="mock-kpi-label">Balance</div><div class="mock-kpi-val">452</div></div>
+              </div>
+
+              <table class="mock-table">
+                <thead>
+                  <tr><th>#</th><th>Product</th><th>Total In</th><th>Total Out</th><th>Balance</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>Mango</td><td class="inv-in">150</td><td class="inv-out">50</td><td class="calc">100</td><td><span class="mock-badge ok">OK</span></td></tr>
+                  <tr class="low"><td>2</td><td>Onion</td><td class="inv-in">120</td><td class="inv-out">118</td><td class="calc" style="color:#ef4444">2</td><td><span class="mock-badge low">LOW</span></td></tr>
+                  <tr><td>3</td><td>Rice</td><td class="inv-in">200</td><td class="inv-out">110</td><td class="calc">90</td><td><span class="mock-badge ok">OK</span></td></tr>
+                  <tr><td>4</td><td>Milk</td><td class="inv-in">150</td><td class="inv-out">90</td><td class="cts">60</td><td><span class="mock-badge ok">OK</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout-strip" style="max-width:1000px;width:100%;margin-top:20px;text-align:left">
+    <div class="callout-card"><strong>🔴 Alert Threshold</strong>Rows turn red automatically when stock falls below your configured minimum</div>
+    <div class="callout-card violet"><strong>⊞∑ Cross-Table Aggregate</strong>Balance auto-computed from Stock In minus Stock Out — live on every save</div>
+    <div class="callout-card green"><strong>📊 Custom Dashboard Widgets</strong>Add any table's Sum / Count / Average as a KPI card with one click</div>
+  </div>
+</div>
+
+<!-- STAT STRIP -->
+<div class="stat-strip reveal visible">
+  <div class="stat-item"><span class="stat-val">22</span><span class="stat-lbl">Field Types</span></div>
+  <div class="stat-item"><span class="stat-val">5</span><span class="stat-lbl">Save Methods</span></div>
+  <div class="stat-item"><span class="stat-val">∞</span><span class="stat-lbl">Tables</span></div>
+  <div class="stat-item"><span class="stat-val">0</span><span class="stat-lbl">Dependencies</span></div>
+  <div class="stat-item"><span class="stat-val">1</span><span class="stat-lbl"> File</span></div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <div class="section-label reveal visible">Core Features</div>
+    <h2 class="reveal visible">Everything in<br>one file</h2>
+    <p class="section-sub reveal visible">No backend, no database server, no installation. Download once, run forever.</p>
+
+    <div class="features-grid reveal visible">
+      <div class="feature-card">
+        <div class="feature-icon cyan">⊞</div>
+        <div class="feature-title">Visual Table Builder</div>
+        <div class="feature-desc">Design tables with 22 field types including calculated, cross-table aggregate, and auto-timestamp. Set required, unique, indexed flags. Drag to reorder fields.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon violet">⊞∑</div>
+        <div class="feature-title">Cross-Table Aggregates</div>
+        <div class="feature-desc">Link fields across tables. Automatically compute Sum, Count, Average, Min, Max from another table's records — filtered by a matching key. Powers live stock balance.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon green">∑</div>
+        <div class="feature-title">Calculated Fields</div>
+        <div class="feature-desc">Write any JavaScript expression as a formula. <code>Total In - Total Out</code>, <code>price * qty</code>, <code>name + ' ' + surname</code>. Space-in-name fields fully supported.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon amber">🕐✓</div>
+        <div class="feature-title">Auto Timestamp</div>
+        <div class="feature-desc">Fields that auto-fill on Create, Update, or both. No manual date entry needed. Displayed as formatted local date-time in data view.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon red">⚠</div>
+        <div class="feature-title">Alert Thresholds</div>
+        <div class="feature-desc">Set a minimum value on any numeric field. Rows glow red when below threshold, amber when within 50% above it. Perfect for low-stock monitoring.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon cyan">📊</div>
+        <div class="feature-title">Customisable Dashboard</div>
+        <div class="feature-desc">Add any table's metric as a KPI widget card — choose aggregate, field, colour, and label. Reorder widgets. Persists across saves.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon violet">▾→⊞</div>
+        <div class="feature-title">Live Dropdown from Table</div>
+        <div class="feature-desc">Link a dropdown field's choices to another table's column. New products added to Products immediately appear in Stock In / Stock Out dropdowns.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon green">↺</div>
+        <div class="feature-title">Auto-Sync &amp; Recalc</div>
+        <div class="feature-desc">When a new record is saved, all linked tables update automatically. Use ↺ Recalc button to force-refresh all cross-table values, calculated fields and timestamps.</div>
+      </div>
+  </div>
+</section>
+
+<!-- FIELD TYPES -->
+<section id="field-types" class="field-types-section">
+  <div class="container">
+    <div class="section-label reveal visible">Field Types</div>
+    <h2 class="reveal visible">22 field types<br>for every need</h2>
+    <p class="section-sub reveal visible">From simple text to cross-table aggregates — every type is supported with proper input, validation, and display formatting.</p>
+
+    <div class="field-type-grid reveal visible">
+      <div class="field-chip"><span class="field-chip-icon">Aa</span>Text (Short)</div>
+      <div class="field-chip"><span class="field-chip-icon">¶</span>Long Text</div>
+      <div class="field-chip"><span class="field-chip-icon">#</span>Number (Int)</div>
+      <div class="field-chip"><span class="field-chip-icon">0.0</span>Decimal</div>
+      <div class="field-chip"><span class="field-chip-icon">₹</span>Currency</div>
+      <div class="field-chip"><span class="field-chip-icon">▾</span>Dropdown</div>
+      <div class="field-chip"><span class="field-chip-icon">☑</span>Checkbox</div>
+      <div class="field-chip"><span class="field-chip-icon">◉</span>Radio</div>
+      <div class="field-chip"><span class="field-chip-icon">📅</span>Date</div>
+      <div class="field-chip"><span class="field-chip-icon">⏱</span>Time</div>
+      <div class="field-chip"><span class="field-chip-icon">🕐</span>DateTime</div>
+      <div class="field-chip"><span class="field-chip-icon">⊙</span>Boolean</div>
+      <div class="field-chip"><span class="field-chip-icon">@</span>Email</div>
+      <div class="field-chip"><span class="field-chip-icon">☎</span>Phone</div>
+      <div class="field-chip"><span class="field-chip-icon">⊕</span>URL</div>
+      <div class="field-chip"><span class="field-chip-icon">🖼</span>Image URL</div>
+      <div class="field-chip"><span class="field-chip-icon">🎨</span>Color</div>
+      <div class="field-chip"><span class="field-chip-icon">★</span>Rating (1–5)</div>
+      <div class="field-chip"><span class="field-chip-icon">↗</span>Foreign Key</div>
+      <div class="field-chip field-chip-special"><span class="field-chip-icon">∑</span>Calculated</div>
+      <div class="field-chip field-chip-special"><span class="field-chip-icon">⊞∑</span>Cross-Table Agg</div>
+      <div class="field-chip field-chip-special"><span class="field-chip-icon">🕐✓</span>Auto Timestamp</div>
+    </div>
+
+    <div style="margin-top:32px;padding:20px 24px;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);border-radius:10px" class="reveal visible">
+      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--violet);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Special Field Types</div>
+      <p style="font-size:0.85rem;color:var(--text2);font-weight:300;line-height:1.6">The last three field types — <strong style="color:var(--text)">Calculated</strong>, <strong style="color:var(--text)">Cross-Table Aggregate</strong>, and <strong style="color:var(--text)">Auto Timestamp</strong> — are computed automatically on every save. They appear read-only in the data entry form and update live in the data view. No manual input required.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="container">
+    <div class="section-label reveal visible">Workflow</div>
+    <h2 class="reveal visible">From zero to<br>working database in minutes</h2>
+
+    <div class="steps reveal visible">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-title">Create a Table</div>
+        <div class="step-desc">Click + New Table in the sidebar. Name it, give it a colour. Your table is ready in seconds.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-title">Add Fields</div>
+        <div class="step-desc">Use the Table Builder to add fields. Choose type, set required/unique flags, configure options. Drag to reorder.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-title">Enter Data</div>
+        <div class="step-desc">Switch to Data tab. Click + New Record. Fill the form — dropdowns, dates, ratings all have proper inputs.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <div class="step-title">Save &amp; Share</div>
+        <div class="step-desc">Auto-saves to IndexedDB. Ctrl+S to a .xlsx file. Export a runtime app for your team to use without the designer.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STOCK INVENTORY -->
+<section id="inventory" class="inventory-section">
+  <div class="container">
+    <div class="section-label reveal visible">Use Case</div>
+    <h2 class="reveal visible">Built for stock<br>inventory out of the box</h2>
+    <p class="section-sub reveal visible">DataForge ships with a complete sample inventory workspace — Products, Stock In, Stock Out, and a live Stock Balance that auto-computes itself.</p>
+
+    <div class="inventory-grid reveal visible">
+      <div class="inventory-visual">
+        <div class="inv-header">⊞ Stock Balance — Live View</div>
+        <table class="inv-table">
+          <thead>
+            <tr><th>Product</th><th>Total In</th><th>Total Out</th><th>Balance</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Mango</td><td class="inv-in">150</td><td class="inv-out">50</td><td class="inv-bal">100</td><td><span class="inv-badge-ok">OK</span></td></tr>
+            <tr><td>Banana</td><td class="inv-in">80</td><td class="inv-out">35</td><td class="inv-bal">45</td><td><span class="inv-badge-ok">OK</span></td></tr>
+            <tr class="alert"><td>Onion</td><td class="inv-in">120</td><td class="inv-out">118</td><td class="inv-bal low">2</td><td><span class="inv-badge-low">LOW STOCK</span></td></tr>
+            <tr><td>Rice</td><td class="inv-in">200</td><td class="inv-out">110</td><td class="inv-bal">90</td><td><span class="inv-badge-ok">OK</span></td></tr>
+            <tr><td>Milk</td><td class="inv-in">150</td><td class="inv-out">90</td><td class="inv-bal">60</td><td><span class="inv-badge-ok">OK</span></td></tr>
+            <tr><td>Turmeric</td><td class="inv-in">30</td><td class="inv-out">5</td><td class="inv-bal">25</td><td><span class="inv-badge-ok">OK</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="inventory-list">
+        <div class="inv-point">
+          <div class="inv-point-icon g">↺</div>
+          <div>
+            <div class="inv-point-title">Auto-synced Balance</div>
+            <div class="inv-point-desc">Add any entry to Stock In or Stock Out — the Balance row updates instantly. Cross-table fields recalculate on every save, no manual refresh needed.</div>
+          </div>
+        </div>
+        <div class="inv-point">
+          <div class="inv-point-icon c">⊞∑</div>
+          <div>
+            <div class="inv-point-title">Per-product matching</div>
+            <div class="inv-point-desc">Cross-table aggregate matches by product name — Mango's balance only sums Mango entries from Stock In and Out. Full per-row filtering.</div>
+          </div>
+        </div>
+        <div class="inv-point">
+          <div class="inv-point-icon v">▾→</div>
+          <div>
+            <div class="inv-point-title">Product dropdown syncs automatically</div>
+            <div class="inv-point-desc">Add Papaya to Products — it immediately appears in Stock In and Stock Out dropdown menus. No manual updating of choices.</div>
+          </div>
+        </div>
+        <div class="inv-point">
+          <div class="inv-point-icon a">⚠</div>
+          <div>
+            <div class="inv-point-title">Low-stock alerts</div>
+            <div class="inv-point-desc">Set a reorder threshold per product. Rows glow red when below, amber when approaching. Visible at a glance in the data view.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY – replaced broken links with single image -->
+<section style="background: var(--surface)">
+  <div class="container">
+    <div class="section-label">Gallery</div>
+    <h2>See DataForge in Action</h2>
+
+    <div style="margin-top: 40px; max-width: 1100px; margin-left: auto; margin-right: auto;">
+      <div class="preview-frame" style="border-radius: 14px; overflow: hidden;">
+        <img src="Untitled-1.jpg" alt="DataForge in action – license expiry tracking and inventory" style="width:100%; display:block;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SAVE & EXPORT -->
+<section>
+  <div class="container">
+    <div class="section-label reveal visible">Save &amp; Export</div>
+    <h2 class="reveal visible">5 ways to<br>save your work</h2>
+    <p class="section-sub reveal visible">Your data never leaves your machine unless you choose to export it.</p>
+
+    <div class="save-grid reveal visible">
+      <div class="save-card">
+        <span class="save-icon">⚡</span>
+        <div class="save-title">Auto-save</div>
+        <div class="save-desc">Every change auto-saves to browser IndexedDB within 1.5 seconds. Survives tab close, browser restart. Falls back to localStorage.</div>
+      </div>
+      <div class="save-card">
+        <span class="save-icon">⌨</span>
+        <div class="save-title">Ctrl + S</div>
+        <div class="save-desc">Pin a .xlsx file once via the File System Access API. Every Ctrl+S silently overwrites it — no dialog, no clicks.</div>
+      </div>
+      <div class="save-card">
+        <span class="save-icon">📄</span>
+        <div class="save-title">Save Workspace JSON</div>
+        <div class="save-desc">Export complete workspace — all tables, records, field definitions, dashboard widgets — as a portable JSON file.</div>
+      </div>
+      <div class="save-card">
+        <span class="save-icon">📊</span>
+        <div class="save-title">Export to Excel</div>
+        <div class="save-desc">Export any table or all tables as a clean .xlsx file — one sheet per table, headers + data only. Download from the toolbar.</div>
+      </div>
+      <div class="save-card">
+        <span class="save-icon">🚀</span>
+        <div class="save-title">Export Data Entry App</div>
+        <div class="save-desc">Generate a stripped runtime version — no designer, just data entry. Share a single APP file with your team.</div>
+      </div>
+      <div class="save-card">
+        <span class="save-icon">📤</span>
+        <div class="save-title">Import from Excel / JSON</div>
+        <div class="save-desc">Load a previously exported workspace. Restores all tables, records, field types, dashboard widgets, and settings.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK START GUIDE -->
+<section id="guide" class="guide-section">
+  <div class="container">
+    <div class="section-label reveal visible">Quick Start Guide</div>
+    <h2 class="reveal visible">Step-by-step<br>setup guides</h2>
+
+    <div class="guide-grid reveal visible">
+      <div class="guide-block">
+        <div class="guide-block-header">📦 Setup Stock Inventory</div>
+        <div class="guide-block-body">
+          <div class="guide-step">
+            <div class="guide-step-num">1</div>
+            <div class="guide-step-text">Create table <strong>Products</strong> with fields: <code>Product</code> (Text, Unique), <code>Category</code> (Dropdown), <code>Unit</code> (Dropdown), <code>Reorder Level</code> (Number, Alert Threshold).</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">2</div>
+            <div class="guide-step-text">Create <strong>Stock In</strong> with fields: <code>Product</code> (Dropdown, From Table → Products.Product), <code>Quantity</code> (Number), <code>Date</code>, <code>Supplier</code>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">3</div>
+            <div class="guide-step-text">Create <strong>Stock Out</strong> with same structure as Stock In plus a <code>Reason</code> dropdown (Sale, Damaged, Expired).</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">4</div>
+            <div class="guide-step-text">Create <strong>Stock Balance</strong>. Add <code>Total In</code> — type Cross-Table Agg → Stock In → Quantity → Sum → Match: Product = Product.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">5</div>
+            <div class="guide-step-text">Add <code>Total Out</code> same way pointing to Stock Out. Add <code>Balance</code> as Calculated field: <code>Total In - Total Out</code>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">6</div>
+            <div class="guide-step-text">Or skip all this — load <strong>sample_inventory.json</strong> via Import → JSON to get a fully wired workspace instantly.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-block">
+        <div class="guide-block-header">⊞∑ Cross-Table Aggregate Setup</div>
+        <div class="guide-block-body">
+          <div class="guide-step">
+            <div class="guide-step-num">1</div>
+            <div class="guide-step-text">In the target table, add a new field. Select type <strong>Cross-Table Agg</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">2</div>
+            <div class="guide-step-text">In Field Properties: choose <strong>Source Table</strong> (e.g. Stock In). The Source Field dropdown auto-populates.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">3</div>
+            <div class="guide-step-text">Choose <strong>Aggregate</strong>: Sum / Count / Average / Min / Max.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">4</div>
+            <div class="guide-step-text">Set <strong>Match Field</strong> (in source table) = <strong>This table's link field</strong> to filter by row. Leave blank to aggregate all rows.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">5</div>
+            <div class="guide-step-text">The field will auto-compute on every save and on ↺ Recalc. Add it to a Dashboard widget for a live KPI card.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-block">
+        <div class="guide-block-header">📊 Customise Dashboard</div>
+        <div class="guide-block-body">
+          <div class="guide-step">
+            <div class="guide-step-num">1</div>
+            <div class="guide-step-text">Click <strong>⊞ Dashboard</strong> button in the header, or the Customize button on the dashboard view.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">2</div>
+            <div class="guide-step-text">Select <strong>Table</strong>, <strong>Field</strong>, <strong>Aggregate</strong> (Sum/Count/Average/Min/Max), and a <strong>Label</strong> for the card.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">3</div>
+            <div class="guide-step-text">Pick a <strong>colour</strong> (Cyan, Purple, Green, Amber, Red). Click <strong>+ Add</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">4</div>
+            <div class="guide-step-text">Use ↑↓ to reorder widgets or ✕ to remove them. Widgets persist across all save methods.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-block">
+        <div class="guide-block-header">🚀 Export Data Entry App</div>
+        <div class="guide-block-body">
+          <div class="guide-step">
+            <div class="guide-step-num">1</div>
+            <div class="guide-step-text">The exported file contains all your tables, records, and dashboard widgets. Table Builder, Form Manager, and designer tools are stripped out.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">2</div>
+            <div class="guide-step-text">Share the single .exe file. Recipients open it in Windows System — no installation, no server needed to use the runtime version.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPEC TABLE -->
+<section>
+  <div class="container">
+    <div class="section-label reveal visible">Technical Specs</div>
+    <h2 class="reveal visible">What's inside</h2>
+
+    <table class="spec-table reveal visible">
+      <thead>
+        <tr><th>Spec</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Deployment</td><td>Single .exe file — no build step, no npm, no server required</td></tr>
+        <tr><td>Storage</td><td>IndexedDB (primary) → localStorage (fallback) → File System Access API (Ctrl+S to .xlsx)</td></tr>
+        <tr><td>Libraries</td><td>SheetJS (xlsx) via CDN — only external dependency for Excel read/write</td></tr>
+        <tr><td>Field Types</td><td>22 types including 3 computed types (Calculated, Cross-Table Agg, Auto Timestamp)</td></tr>
+        <tr><td>Practical Capacity</td><td>~5,000 records per table smooth · ~20,000 usable · 100,000+ will lag</td></tr>
+        <tr><td>Themes</td><td>Dark (default) and Light — toggle in header</td></tr>
+        <tr><td>Print / Report</td><td>Per-record print with company logo, address, configurable layout</td></tr>
+        <tr><td>Import</td><td>JSON workspace, Excel (.xlsx), CSV</td></tr>
+        <tr><td>Export</td><td>JSON workspace, Excel (per-table or all), CSV, Data Entry App </td></tr>
+        <tr><td>Code structure</td><td>Section-tagged (§CSS-01…§JS-43) for easy manual editing and maintenance</td></tr>
+        <tr><td>File size</td><td>~171KB uncompressed — loads instantly</td></tr>
+        <tr><td>Browser support</td><td>Chrome / Edge (full) · Firefox (full, no File System Access API) · Safari (full)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="section-label reveal visible">FAQ</div>
+    <h2 class="reveal visible">Common questions</h2>
+
+    <div class="faq-list reveal visible">
+      <div class="faq-item">
+        <div class="faq-q">Where is my data stored?</div>
+        <div class="faq-a">All data is stored locally in your browser's IndexedDB (with localStorage fallback). Nothing is uploaded to any server. If you use Ctrl+S with a pinned file, data is written directly to your disk. You can also export to JSON or Excel at any time for portable backups.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What happens if I clear my browser data?</div>
+        <div class="faq-a">IndexedDB and localStorage will be cleared. Always export a JSON or Excel backup before clearing browser data. The Ctrl+S pinned .xlsx file on your disk is unaffected.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Why does Export Data Entry App require a web server?</div>
+        <div class="faq-a">The export uses <code>fetch(window.location.href)</code> to read the original source file. Browsers block <code>fetch()</code> on <code>file://</code> URLs for security reasons. Use VS Code's Live Server extension, Python's <code>python -m http.server</code>, or any static file server. The exported runtime app can be opened directly by double-click without a server.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I use this for stock inventory without setting it up manually?</div>
+        <div class="faq-a">Yes — load the included <strong>sample_inventory.json</strong> file via Import → JSON. It contains Products, Stock In, Stock Out, and Stock Balance tables with fully wired cross-table aggregates, 8 products, sample transactions, and 4 dashboard widgets pre-configured.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How do I change the currency symbol from $ to ₹?</div>
+        <div class="faq-a">In the JavaScript section <code>§JS-23</code> (formatCellValue function), find <code>'$'</code> in the currency case and change it to <code>'₹'</code>. It's a single character change.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can the Stock Balance update automatically when I add a new entry?</div>
+        <div class="faq-a">Yes. When you save a new record in Stock In or Stock Out, the app automatically recalculates all cross-table aggregate fields in linked tables (like Stock Balance) and refreshes the view. If values look stale, use the ↺ Recalc button in the data toolbar to force a full recompute.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I handle 1 million records?</div>
+        <div class="faq-a">Not comfortably. This app is browser-based and stores everything in memory. It performs smoothly up to ~5,000 records per table, usably to ~20,000, and will lag beyond that. For millions of records you'd need a backend database (PostgreSQL, MySQL) with this app as a frontend — a fundamentally different architecture.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<div class="comparison-container">
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th style="text-align:left">Feature</th>
+        <th>DataForge</th>
+        <th>Airtable</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Data Privacy</td>
+        <td class="highlight-df">Local-First (Private)</td>
+        <td>Cloud-Dependent</td>
+      </tr>
+      <tr>
+        <td>Connectivity</td>
+        <td class="highlight-df">Internet Required</td>
+        <td>Always-Online</td>
+      </tr>
+      <tr>
+        <td>Pricing</td>
+        <td class="highlight-df">One Time</td>
+        <td>Subscription-based</td>
+      </tr>
+      <tr>
+        <td>Setup Experience</td>
+        <td class="highlight-df">Instantaneous</td>
+        <td>Configuration-Heavy</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- CTA -->
+<section id="download" class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="section-label reveal visible" style="justify-content:center">Ready to start</div>
+  <h2 class="reveal visible">One file.<br>Full database.</h2>
+  <p class="reveal visible">No signup. No installation. No cloud. Just download and open.</p>
+  <div class="hero-actions reveal visible">
+    <a href="https://drive.proton.me/urls/CNSMS4SWYW#PJlcygsvKuW1" class="btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+      ⬇ Download DataForge
+    </a>
+    <a href="https://youtube.com/watch?v=kqASlz5um1Y&feature=youtu.be" display: inline-flex; align-items: center; gap: 8px;">
+    <button class="btn-ghost">⬇ Watch Demo Video</button>
+    </a>  
+  </div>
+  <div style="margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--green); flex-wrap: wrap;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"></path></svg>
+    <span style="font-family: var(--mono); font-size: 0.8rem;">100% Virus-Free · Safe &amp; Verified</span>
+  </div>
+  <p style="font-size:0.75rem;color:var(--text3);margin-top:24px;font-family:var(--mono)" class="reveal visible">Open in Chrome, Edge, or Firefox · No internet required after first load</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div><strong>DataForge</strong> — Windows-based database builder</div>
+  <div class="footer-contact">
+    <a href="mailto:xionix555@protonmail.com" class="email">
+      ✉ xionix555@protonmail.com
+    </a>
+    <a href="https://wa.me/919804711241?text=Hi%21%20I%27m%20interested%20in%20DataForge" target="_blank" class="whatsapp">
+      💬 +91 9804711241
+    </a>
+  </div>
+  <div style="font-family:var(--mono);font-size:0.65rem">v1.0 · Single file · 136MB</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if(e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if(!wasOpen) item.classList.add('open');
+    });
+  });
+
+  // Stat counter
+  function animateCount(el, target, suffix='') {
+    let start = 0;
+    const dur = 1800;
+    const step = (timestamp) => {
+      if(!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = (target === Infinity ? '∞' : Math.round(eased * target)) + suffix;
+      if(progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  const statVals = document.querySelectorAll('.stat-val');
+  const statTargets = [22, 5, Infinity, 0, 1];
+  const statObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting) {
+        statVals.forEach((el, i) => animateCount(el, statTargets[i]));
+        statObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+  if(document.querySelector('.stat-strip')) statObserver.observe(document.querySelector('.stat-strip'));
+
+  // Mock table row hover
+  document.querySelectorAll('.mock-table tbody tr').forEach(tr => {
+    tr.addEventListener('mouseenter', () => { if(!tr.classList.contains('low')) tr.style.background = 'rgba(255,255,255,0.03)'; });
+    tr.addEventListener('mouseleave', () => { if(!tr.classList.contains('low')) tr.style.background = ''; });
+  });
+</script>
+</body>
+</html>
