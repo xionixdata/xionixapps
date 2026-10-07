@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XionixDesktop | Offline Desktop Applications Suite</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: { extend: {
+    colors: { slate: {50:'#f8fafc',100:'#f1f5f9',200:'#e2e8f0',800:'#1e293b',900:'#0f172a'} }
+  }}
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body{font-family:'Inter',sans-serif}
+.hide-scrollbar::-webkit-scrollbar{display:none}
+.hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+.product-frame{width:100%;height:calc(100vh - 245px);min-height:720px;border:0;background:#fff;display:block}
+.tab-btn{transition:all .2s ease;white-space:nowrap}
+.tab-btn.active{background:#4f46e5;color:#fff;box-shadow:0 8px 20px rgba(79,70,229,.20)}
+.placeholder-grid{background-image:linear-gradient(rgba(99,102,241,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,.07) 1px,transparent 1px);background-size:24px 24px}
+@media(max-width:640px){.product-frame{height:calc(100vh - 300px);min-height:650px}}
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+
+<!-- XionixDesktop company information - retained from the original main page -->
+<header class="sticky top-0 z-40 backdrop-blur-xl bg-white/95 border-b border-slate-200 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center space-x-3 min-w-0">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-lg">
+          <i class="fa-solid fa-hard-drive text-lg"></i>
+        </div>
+        <div class="min-w-0">
+          <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-slate-900 via-indigo-950 to-indigo-800 bg-clip-text text-transparent">XionixDesktop</span>
+          <span class="block text-xs font-semibold text-indigo-600 tracking-wider uppercase">100% Offline Secured Apps</span>
+        </div>
+      </div>
+
+<a href="https://wa.me/919804711241?text=Hi%21%20I%27m%20interested%20in%20DataForge" target="_blank" class="contact-btn whatsapp" style="padding:6px 14px;font-size:.99rem;">
+        <span class="icon">💬</span> WhatsApp
+      </a>
+
+      <div class="hidden md:flex items-center space-x-2 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>No Cloud Dependency • Local SQLite / Encrypted DB</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="flex-1">
+  <!-- Company / master information -->
+  <section class="relative pt-10 pb-8 overflow-hidden border-b border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="inline-flex items-center px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider border border-indigo-100">
+        Xionix Software Systems
+      </div>
+      <h1 class="mt-4 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 max-w-4xl mx-auto leading-tight">
+        High-Performance Desktop Applications That
+        <span class="bg-gradient-to-r from-indigo-600 via-violet-600 to-cyan-600 bg-clip-text text-transparent">Work Offline Forever</span>
+      </h1>
+      <p class="mt-5 text-base sm:text-lg text-slate-600 max-w-3xl mx-auto">
+        Lightning-fast native speed, zero monthly cloud subscriptions, complete data sovereignty,
+        and instant local backups tailored for mission-critical operations.
+      </p>
+
+      <div class="mt-7 grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto text-left">
+        <div class="bg-white border border-slate-200 shadow-sm p-4 rounded-xl flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-bolt"></i></div>
+          <div><div class="text-slate-900 font-bold text-sm">Fast & Local</div><div class="text-slate-500 text-xs">Native-style performance</div></div>
+        </div>
+        <div class="bg-white border border-slate-200 shadow-sm p-4 rounded-xl flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-wifi-slash"></i></div>
+          <div><div class="text-slate-900 font-bold text-sm">Offline First</div><div class="text-slate-500 text-xs">No internet required</div></div>
+        </div>
+        <div class="bg-white border border-slate-200 shadow-sm p-4 rounded-xl flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-lg bg-cyan-50 text-cyan-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-database"></i></div>
+          <div><div class="text-slate-900 font-bold text-sm">Your Data</div><div class="text-slate-500 text-xs">Local database control</div></div>
+        </div>
+        <div class="bg-white border border-slate-200 shadow-sm p-4 rounded-xl flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-shield-halved"></i></div>
+          <div><div class="text-slate-900 font-bold text-sm">Secure</div><div class="text-slate-500 text-xs">Encrypted/local-first design</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product navigation -->
+  <section class="sticky top-16 z-30 bg-slate-50/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3">
+      <div class="flex gap-2 overflow-x-auto hide-scrollbar" role="tablist" aria-label="XionixDesktop applications">
+        <button class="tab-btn active px-4 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 border border-slate-200" onclick="openTab('dataforge',this)" role="tab">01 · DataForge</button>
+        <button class="tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 border border-slate-200" onclick="openTab('dukaan',this)" role="tab">02 · Dukaan Khata</button>
+        <button class="tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 border border-slate-200" onclick="openTab('fiberops',this)" role="tab">03 · FiberOps ISP</button>
+        <button class="tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 border border-slate-200" onclick="openTab('future4',this)" role="tab">04 · Coming Soon</button>
+        <button class="tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 border border-slate-200" onclick="openTab('future5',this)" role="tab">05 · Coming Soon</button>
+        <button class="tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 border border-slate-200" onclick="openTab('future6',this)" role="tab">06 · Coming Soon</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product panels -->
+  <section class="max-w-7xl mx-auto w-full px-0 sm:px-4 lg:px-6 py-4">
+    <div id="dataforge" class="tab-panel bg-white rounded-none sm:rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <iframe class="product-frame" src="dataforge.html" title="DataForge"></iframe>
+    </div>
+    <div id="dukaan" class="tab-panel hidden bg-white rounded-none sm:rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <iframe class="product-frame" src="dukaan_khata_shop_manager.html" title="Dukaan Khata Shop Manager"></iframe>
+    </div>
+    <div id="fiberops" class="tab-panel hidden bg-white rounded-none sm:rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <iframe class="product-frame" src="fiberops_isp_suite.html" title="FiberOps ISP Suite"></iframe>
+    </div>
+
+    <div id="future4" class="tab-panel hidden placeholder-grid rounded-2xl border-2 border-dashed border-indigo-200 min-h-[650px] flex items-center justify-center bg-white">
+      <div class="text-center px-6 max-w-xl">
+        <div class="mx-auto w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl"><i class="fa-solid fa-plus"></i></div>
+        <h2 class="mt-5 text-2xl font-extrabold text-slate-900">Product 04 — Coming Soon</h2>
+        <p class="mt-2 text-slate-600">Reserved for your next XionixDesktop application. Replace this panel with the new product HTML later.</p>
+        <div class="mt-5 inline-flex px-4 py-2 rounded-lg bg-indigo-50 text-indigo-700 text-sm font-semibold">Ready for future use</div>
+      </div>
+    </div>
+    <div id="future5" class="tab-panel hidden placeholder-grid rounded-2xl border-2 border-dashed border-indigo-200 min-h-[650px] flex items-center justify-center bg-white">
+      <div class="text-center px-6 max-w-xl">
+        <div class="mx-auto w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl"><i class="fa-solid fa-plus"></i></div>
+        <h2 class="mt-5 text-2xl font-extrabold text-slate-900">Product 05 — Coming Soon</h2>
+        <p class="mt-2 text-slate-600">Reserved for a future application. Change the tab name and connect its HTML file when ready.</p>
+      </div>
+    </div>
+    <div id="future6" class="tab-panel hidden placeholder-grid rounded-2xl border-2 border-dashed border-indigo-200 min-h-[650px] flex items-center justify-center bg-white">
+      <div class="text-center px-6 max-w-xl">
+        <div class="mx-auto w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl"><i class="fa-solid fa-plus"></i></div>
+        <h2 class="mt-5 text-2xl font-extrabold text-slate-900">Product 06 — Coming Soon</h2>
+        <p class="mt-2 text-slate-600">Reserved for a future application. Connect another HTML file here when the product is ready.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="bg-white border-t border-slate-200 text-slate-600 py-8 mt-4 shadow-inner">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-sm">X</div>
+      <span class="text-slate-900 font-semibold text-base">XionixDesktop Offline Suite</span>
+    </div>
+    <div class="text-sm text-center md:text-right">
+      <p>&copy; 2026 Xionix Software Systems. All rights reserved. Built for high-speed offline operations.</p>
+      <p class="text-xs text-slate-500 mt-1">Product tabs are modular and can be replaced or extended as new applications are added.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+function openTab(id, button) {
+  document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById(id).classList.remove('hidden');
+  button.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
